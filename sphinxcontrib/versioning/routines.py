@@ -7,7 +7,7 @@ import re
 import subprocess
 
 from sphinxcontrib.versioning.git import export, fetch_commits, filter_and_date, GitError, list_remote
-from sphinxcontrib.versioning.lib import Config, HandledError, TempDir
+from sphinxcontrib.versioning.lib import Config, HandledError, TempDir, ChangeDir
 from sphinxcontrib.versioning.sphinx_ import build, read_config
 
 RE_INVALID_FILENAME = re.compile(r'[^0-9A-Za-z.-]')
@@ -115,11 +115,26 @@ def pre_build(local_root, versions):
     log = logging.getLogger(__name__)
     exported_root = TempDir(True).name
 
-    # Extract all.
-    for sha in {r['sha'] for r in versions.remotes}:
-        target = os.path.join(exported_root, sha)
-        log.debug('Exporting %s to temporary directory.', sha)
-        export(local_root, sha, target)
+    with TempDir() as source_repository:
+        import shutil
+        with ChangeDir(source_repository):
+            subprocess.check_call(["git", "clone", local_root, "." ])
+            if Config.from_context().run_setup_py:
+                subprocess.check_call(["git","submodule","init"])
+                subprocess.check_call(["git","submodule","sync"])
+                subprocess.check_call(["git","submodule","update","--depth=%d"%Config.from_context().submodule_depth])
+
+
+        # Extract all.
+        for sha in {r['sha'] for r in versions.remotes}:
+            target = os.path.join(exported_root, sha)
+            log.debug('Exporting %s to temporary directory.', sha)
+            # export(local_root, sha, target)
+            shutil.copytree(source_repository,target)
+
+            with ChangeDir(target):
+                subprocess.call(["git", "checkout", "--force", sha])
+
 
     # Build root.
     remote = versions[Config.from_context().root_ref]

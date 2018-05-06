@@ -204,6 +204,11 @@ def build_options(func):
     func = click.option('-W', '--whitelist-tags', multiple=True,
                         help='Whitelist tags that match the pattern. Can be specified more than once.')(func)
 
+    func = click.option('--run-setup-py', is_flag=True,
+                        help='Run `setup.py install` before `sphinx-build`')(func)
+    func = click.option('--submodule-depth', type=click.INT,
+                        help='Passed to `git submodule --depth=%d`')(func)
+
     return func
 
 
