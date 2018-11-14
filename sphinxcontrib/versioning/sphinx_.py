@@ -240,12 +240,13 @@ def build(source, target, versions, current_name, is_root):
     config = Config.from_context()
 
     if config.run_setup_py:
-        current_version_root = subprocess.check_output(
-            "git rev-parse --show-toplevel".split(" ")
-        ).decode("utf-8").split("\n")[0]
+        with ChangeDir(source):
+            current_version_root = subprocess.check_output(
+                "git rev-parse --show-toplevel".split(" ")
+            ).decode("utf-8").split("\n")[0]
 
         with ChangeDir(current_version_root):
-            subprocess.check_call(("python {} install".format("setup.py")).split(" "))
+            subprocess.check_call(["python", "setup.py", "install"])
 
     log.debug('Running sphinx-build for %s with args: %s', current_name, str(argv))
     child = multiprocessing.Process(target=_build, args=(argv, config, versions, current_name, is_root))
