@@ -17,7 +17,7 @@ from sphinx.cmd.build import build_main
 
 
 from sphinxcontrib.versioning import __version__
-from sphinxcontrib.versioning.lib import Config, HandledError, TempDir
+from sphinxcontrib.versioning.lib import Config, HandledError, TempDir, ChangeDir
 from sphinxcontrib.versioning.versions import Versions
 
 SC_VERSIONING_VERSIONS = list()  # Updated after forking.
@@ -236,9 +236,20 @@ def build(source, target, versions, current_name, is_root):
     :param str current_name: The ref name of the current version being built.
     :param bool is_root: Is this build in the web root?
     """
+    import subprocess
+
     log = logging.getLogger(__name__)
     argv = ('sphinx-build', source, target)
     config = Config.from_context()
+
+    if config.run_setup_py:
+        with ChangeDir(source):
+            current_version_root = subprocess.check_output(
+                "git rev-parse --show-toplevel".split(" ")
+            ).decode("utf-8").split("\n")[0]
+
+        with ChangeDir(current_version_root):
+            subprocess.check_call(["python", "setup.py", "install"])
 
     log.debug('Running sphinx-build for %s with args: %s', current_name, str(argv))
     child = multiprocessing.Process(target=_build, args=(argv, config, versions, current_name, is_root))

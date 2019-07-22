@@ -27,6 +27,7 @@ class Config(object):
         self.no_colors = False
         self.no_local_conf = False
         self.recent_tag = False
+        self.run_setup_py = False
         self.show_banner = False
 
         # Strings.
@@ -46,6 +47,7 @@ class Config(object):
         self.whitelist_tags = tuple()
 
         # Integers.
+        self.submodule_depth = 50
         self.verbose = 0
 
     def __contains__(self, item):
@@ -167,3 +169,16 @@ class TempDir(object):
         shutil.rmtree(self.name, onerror=lambda *a: os.chmod(a[1], __import__('stat').S_IWRITE) or os.unlink(a[1]))
         if os.path.exists(self.name):
             raise IOError(17, "File exists: '{}'".format(self.name))
+
+
+class ChangeDir(object):
+    def __init__(self, dir):
+        self.new_dir = dir
+        self.old_dir = os.path.abspath(os.path.curdir)
+
+    def __enter__(self):
+        os.chdir(self.new_dir)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        os.chdir(self.old_dir)
+
