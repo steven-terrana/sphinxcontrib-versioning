@@ -6,12 +6,15 @@ import multiprocessing
 import os
 import sys
 
-from sphinx import application, build_main, locale
+from sphinx import application, locale
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.config import Config as SphinxConfig
 from sphinx.errors import SphinxError
 from sphinx.jinja2glue import SphinxFileSystemLoader
 from sphinx.util.i18n import format_date
+from sphinx.cmd.build import build_main
+# sphinx.cmd.build.build_main()
+
 
 from sphinxcontrib.versioning import __version__
 from sphinxcontrib.versioning.lib import Config, HandledError, TempDir
