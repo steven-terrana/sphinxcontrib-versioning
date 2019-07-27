@@ -5,6 +5,7 @@ import logging
 import multiprocessing
 import os
 import sys
+import time 
 
 from sphinx import application, locale
 from sphinx.cmd.build import build_main
@@ -236,6 +237,8 @@ def build(source, target, versions, current_name, is_root):
     """
     import subprocess
 
+
+
     log = logging.getLogger(__name__)
     argv = ('sphinx-build', source, target)
     config = Config.from_context()
@@ -276,6 +279,8 @@ def read_config(source, current_name):
     with TempDir() as temp_dir:
         argv = ('sphinx-build', source, temp_dir)
         log.debug('Running sphinx-build for config values with args: %s', str(argv))
+        log.debug("CUSTOM LOG MESSAGE")
+        time.sleep( 5 )
         child = multiprocessing.Process(target=_read_config, args=(argv, config, current_name, queue))
         child.start()
         child.join()  # Block.
