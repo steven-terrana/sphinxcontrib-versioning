@@ -74,11 +74,18 @@ class EventHandlers(object):
         :param sphinx.application.Sphinx app: Sphinx application object.
         :param sphinx.environment.BuildEnvironment env: Sphinx build environment.
         """
+
+        log = logging.getLogger(__name__)
+        log.debug("INSIDE env_updated")
+
         if cls.ABORT_AFTER_READ:
+            log.debug("[env_updated] cls.ABORT_AFTER_READ")
             config = {n: getattr(app.config, n) for n in (a for a in dir(app.config) if a.startswith('scv_'))}
             config['found_docs'] = tuple(str(d) for d in env.found_docs)
             config['master_doc'] = str(app.config.master_doc)
             cls.ABORT_AFTER_READ.put(config)
+            log.debug("config: ")
+            log.debug(config)
             sys.exit(0)
 
     @classmethod
