@@ -279,7 +279,7 @@ def read_config(source, current_name):
 
     with TempDir() as temp_dir:
         log.debug("[read_config] Created temp dir: %s",temp_dir)
-        argv = ("sphinx-build", source, temp_dir)
+        argv = (source, temp_dir)
         log.debug('Running sphinx-build for config values with args: %s', str(argv))
         child = multiprocessing.Process(target=_read_config, args=(argv, config, current_name, queue))
         child.start()
