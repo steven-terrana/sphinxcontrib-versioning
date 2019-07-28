@@ -294,5 +294,5 @@ def read_config(source, current_name):
             log.error('sphinx-build failed for branch/tag while reading config: %s', current_name)
             raise HandledError
 
-    config = queue.get()
+    # config = queue.get()
     return config
