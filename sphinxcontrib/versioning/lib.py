@@ -162,13 +162,13 @@ class TempDir(object):
 
     def __exit__(self, *_):
         """Cleanup when exiting context."""
-        self.cleanup()
+        #self.cleanup()
 
     def cleanup(self):
         """Recursively delete directory."""
-        shutil.rmtree(self.name, onerror=lambda *a: os.chmod(a[1], __import__('stat').S_IWRITE) or os.unlink(a[1]))
-        if os.path.exists(self.name):
-            raise IOError(17, "File exists: '{}'".format(self.name))
+        #shutil.rmtree(self.name, onerror=lambda *a: os.chmod(a[1], __import__('stat').S_IWRITE) or os.unlink(a[1]))
+        #if os.path.exists(self.name):
+        #    raise IOError(17, "File exists: '{}'".format(self.name))
 
 
 class ChangeDir(object):
