@@ -372,7 +372,7 @@ def push(ctx, config, rel_source, dest_branch, rel_dest, **options):
     # Clone, build, push.
     for _ in range(PUSH_RETRIES):
         with TempDir() as temp_dir:
-            log.debug("Created temp dir: %s",temp_dir)
+            log.debug("[push] Created temp dir: %s",temp_dir)
             log.info('Cloning %s into temporary directory...', dest_branch)
             try:
                 clone(config.git_root, temp_dir, config.push_remote, dest_branch, rel_dest, config.grm_exclude)

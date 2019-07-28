@@ -114,10 +114,10 @@ def pre_build(local_root, versions):
     """
     log = logging.getLogger(__name__)
     exported_root = TempDir(True).name
-    log.debug("Created temp dir: %s",exported_root)
+    log.debug("[pre_build 1] Created temp dir: %s",exported_root)
 
     with TempDir() as source_repository:
-        log.debug("Created temp dir: %s",source_repository)
+        log.debug("[pre_build 2]Created temp dir: %s",source_repository)
         import shutil
         with ChangeDir(source_repository):
             subprocess.check_call(["git", "clone", local_root, "." ])
@@ -141,7 +141,7 @@ def pre_build(local_root, versions):
     # Build root.
     remote = versions[Config.from_context().root_ref]
     with TempDir() as temp_dir:
-        log.debug("Created temp dir: %s",temp_dir)
+        log.debug("[pre_build 3] Created temp dir: %s",temp_dir)
         log.debug('Building root (before setting root_dirs) in temporary directory: %s', temp_dir)
         source = os.path.dirname(os.path.join(exported_root, remote['sha'], remote['conf_rel_path']))
         build(source, temp_dir, versions, remote['name'], True)
