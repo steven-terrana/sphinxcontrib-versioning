@@ -247,7 +247,7 @@ def build(source, target, versions, current_name, is_root):
         os.makedirs(target)
     
     
-    argv = ('sphinx-build', source, target)
+    argv = (source, target)
     config = Config.from_context()
 
     if config.run_setup_py:
