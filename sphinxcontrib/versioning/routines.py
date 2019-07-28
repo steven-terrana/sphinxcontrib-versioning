@@ -141,8 +141,16 @@ def pre_build(local_root, versions):
 
     # Build root.
     remote = versions[Config.from_context().root_ref]
-    with TempDir(True) as temp_dir:
+    with TempDir() as temp_dir:
         log.debug("[pre_build 3] Created temp dir: %s",temp_dir)
+        
+        # sometimes the target tempdir does not exist.  i don't know why. 
+        # creating it this way means it won't get properly cleaned up.
+        # i'm okay with that since our builds take place in a container
+        if not os.path.exists(temp_dir): 
+            log.debug("[pre_build 3] temp_dir does not exist! creating it")
+            os.makedirs(temp_dir)
+        
         time.sleep( 15 )
         log.debug('Building root (before setting root_dirs) in temporary directory: %s', temp_dir)
         source = os.path.dirname(os.path.join(exported_root, remote['sha'], remote['conf_rel_path']))
