@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import subprocess
+import time 
 
 from sphinxcontrib.versioning.git import export, fetch_commits, filter_and_date, GitError, list_remote
 from sphinxcontrib.versioning.lib import Config, HandledError, TempDir, ChangeDir
@@ -142,6 +143,7 @@ def pre_build(local_root, versions):
     remote = versions[Config.from_context().root_ref]
     with TempDir() as temp_dir:
         log.debug("[pre_build 3] Created temp dir: %s",temp_dir)
+        time.sleep( 5 )
         log.debug('Building root (before setting root_dirs) in temporary directory: %s', temp_dir)
         source = os.path.dirname(os.path.join(exported_root, remote['sha'], remote['conf_rel_path']))
         build(source, temp_dir, versions, remote['name'], True)
