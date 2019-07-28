@@ -24,6 +24,7 @@ def read_local_conf(local_conf):
     log = logging.getLogger(__name__)
 
     # Attempt to read.
+    import pdb; pdb.set_trace()
     log.info('Reading config from %s...', local_conf)
     try:
         config = read_config(os.path.dirname(local_conf), '<local>')
@@ -141,7 +142,6 @@ def pre_build(local_root, versions):
     # Build root.
     remote = versions[Config.from_context().root_ref]
     with TempDir() as temp_dir:
-        import pdb; pdb.set_trace()
         log.debug('Building root (before setting root_dirs) in temporary directory: %s', temp_dir)
         source = os.path.dirname(os.path.join(exported_root, remote['sha'], remote['conf_rel_path']))
         build(source, temp_dir, versions, remote['name'], True)
