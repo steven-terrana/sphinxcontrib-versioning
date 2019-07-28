@@ -2,10 +2,11 @@
 
 import datetime
 import logging
-import multiprocessing
 import os
 import sys
 import time 
+
+from multiprocessing import Process, Queue
 
 from sphinx import application, locale
 from sphinx.cmd.build import build_main
@@ -259,7 +260,7 @@ def build(source, target, versions, current_name, is_root):
             subprocess.check_call(["python", "setup.py", "install"])
 
     log.debug('Running sphinx-build for %s with args: %s', current_name, str(argv))
-    child = multiprocessing.Process(target=_build, args=(argv, config, versions, current_name, is_root))
+    child = Process(target=_build, args=(argv, config, versions, current_name, is_root))
     child.start()
     child.join()  # Block.
     if child.exitcode != 0:
@@ -279,14 +280,14 @@ def read_config(source, current_name):
     :rtype: dict
     """
     log = logging.getLogger(__name__)
-    queue = multiprocessing.Queue()
+    queue = Queue()
     config = Config.from_context()
 
     with TempDir() as temp_dir:
         log.debug("[read_config] Created temp dir: %s",temp_dir)
         argv = (source, temp_dir)
         log.debug('Running sphinx-build for config values with args: %s', str(argv))
-        child = multiprocessing.Process(target=_read_config, args=(argv, config, current_name, queue))
+        child = Process(target=_read_config, args=(argv, config, current_name, queue))
         child.start()
         child.join()  # Block.
         if child.exitcode != 0:
