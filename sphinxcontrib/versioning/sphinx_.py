@@ -155,6 +155,8 @@ def setup(app):
     :returns: Extension version.
     :rtype: dict
     """
+
+    import pdb; pdb.set_trace()
     # Used internally. For rebuilding all pages when one or versions fail.
     app.add_config_value('sphinxcontrib_versioning_versions', SC_VERSIONING_VERSIONS, 'html')
 
