@@ -181,6 +181,8 @@ class ConfigInject(SphinxConfig):
     def __init__(self, *args):
         """Constructor."""
         super(ConfigInject, self).__init__(*args)
+        log = logging.getLogger(__name__)
+        log.debug("ADDING SELF TO EXTENSIONS")
         self.extensions.append('sphinxcontrib.versioning.sphinx_')
 
 
