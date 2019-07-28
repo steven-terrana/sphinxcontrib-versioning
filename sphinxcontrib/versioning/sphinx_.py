@@ -240,7 +240,7 @@ def build(source, target, versions, current_name, is_root):
     log = logging.getLogger(__name__)
     
    
-    argv = ("sphinx-build", source, target)
+    argv = (source, target)
     config = Config.from_context()
 
 
