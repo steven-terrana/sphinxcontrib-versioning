@@ -243,6 +243,7 @@ def build(source, target, versions, current_name, is_root):
     argv = (source, target)
     config = Config.from_context()
 
+
     if config.run_setup_py:
         with ChangeDir(source):
             current_version_root = subprocess.check_output(
