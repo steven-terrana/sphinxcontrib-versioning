@@ -141,7 +141,7 @@ def pre_build(local_root, versions):
 
     # Build root.
     remote = versions[Config.from_context().root_ref]
-    with TempDir() as temp_dir:
+    with TempDir(True) as temp_dir:
         log.debug("[pre_build 3] Created temp dir: %s",temp_dir)
         time.sleep( 5 )
         log.debug('Building root (before setting root_dirs) in temporary directory: %s', temp_dir)
