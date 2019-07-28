@@ -183,6 +183,9 @@ def _build(argv, config, versions, current_name, is_root):
     :param str current_name: The ref name of the current version being built.
     :param bool is_root: Is this build in the web root?
     """
+
+    log = logging.getLogger(__name__)
+
     # Patch.
     application.Config = ConfigInject
     if config.show_banner:
@@ -204,7 +207,9 @@ def _build(argv, config, versions, current_name, is_root):
         argv += config.overflow
 
     # Build.
+    log.debug("CALLING build_main")
     result = build_main(argv)
+    log.debug("POST CALL build_main")
     if result != 0:
         raise SphinxError
 
