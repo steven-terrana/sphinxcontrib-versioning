@@ -237,9 +237,16 @@ def build(source, target, versions, current_name, is_root):
     """
     import subprocess
 
-
-
     log = logging.getLogger(__name__)
+    
+    # sometimes the target tempdir does not exist.  i don't know why. 
+    # creating it this way means it won't get properly cleaned up.
+    # i'm okay with that since our builds take place in a container
+    if not os.path.exists(target): 
+        log.debug("expected temp dir did not exist. creating it.")
+        os.makedirs(target)
+    
+    
     argv = ('sphinx-build', source, target)
     config = Config.from_context()
 
